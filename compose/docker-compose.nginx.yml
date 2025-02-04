@@ -1,0 +1,10 @@
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /docker/open_webui:/app/backend/data
