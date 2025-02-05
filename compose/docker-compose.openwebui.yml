@@ -3,9 +3,16 @@ services:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open_webui
     restart: unless-stopped
-    ports:
-      - "3000:8080"
+    network_mode: "host"  # 网络问题，暂时按这个修复
+    # ports:
+    #   - "3000:8080"
     volumes:
       - /docker/open_webui:/app/backend/data
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    environment:
+      # 疑难杂症：网络问题（跨域） 
+      # 注意，这里要换成你实际访问的页面的域名或网址，否则产生类似跨域问题
+      # 也就是 fetch/xhr 的地址 与 访问 ollama 的连接地址不一致导致的问题
+      - OLLAMA_BASE_URL=http://127.0.0.1:11434
+
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"
