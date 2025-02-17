@@ -13,6 +13,7 @@ services:
       # 注意，这里要换成你实际访问的页面的域名或网址，否则产生类似跨域问题
       # 也就是 fetch/xhr 的地址 与 访问 ollama 的连接地址不一致导致的问题
       - OLLAMA_BASE_URL=http://127.0.0.1:11434
+      - WEBUI_NAME=沃林AI
 
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"

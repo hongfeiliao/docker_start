@@ -1,0 +1,18 @@
+volumes:
+  alist_data:
+    external: true
+
+services:
+  alist:
+    image: xhofe/alist:latest
+    container_name: alist
+    restart: unless-stopped
+    volumes:
+      - alist_data:/opt/alist/data
+    ports:
+      - 5244:5244
+    environment:
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+

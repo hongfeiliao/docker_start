@@ -1,0 +1,37 @@
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    ports:
+      - "13306:3306"
+    volumes:
+      - /docker/nextcloud_data/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+      - MYSQL_PASSWORD=mysqlpassword
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud_network
+
+  app:
+    image: nextcloud
+    restart: unless-stopped
+    ports:
+      - 18080:80
+    depends_on:
+      - db
+    volumes:
+      - /docker/nextcloud_data/nextcloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=mysqlpassword
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_HOST=db
+    networks:
+      - nextcloud_network
+
+networks:
+  nextcloud_network:
+    driver: bridge

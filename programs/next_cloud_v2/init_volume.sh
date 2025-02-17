@@ -1,0 +1,8 @@
+docker volume rm nextcloud_mysql_data nextcloud_nextcloud nextcloud_apps nextcloud_config nextcloud_data nextcloud_theme
+
+docker volume create nextcloud_mysql_data
+docker volume create nextcloud_nextcloud
+docker volume create nextcloud_apps
+docker volume create nextcloud_config
+docker volume create nextcloud_data
+docker volume create nextcloud_theme

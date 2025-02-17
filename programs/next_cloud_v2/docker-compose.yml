@@ -1,0 +1,60 @@
+# docker volume create nextcloud_mysql_data
+
+volumes:
+  mysql_data:
+    external: true
+    name: nextcloud_mysql_data
+  nextcloud:
+    external: true
+    name: nextcloud_nextcloud
+  apps:
+    external: true
+    name: nextcloud_apps
+  config:
+    external: true 
+    name: nextcloud_config
+  data:
+    external: true
+    name: nextcloud_data
+  theme:
+    external: true
+    name: nextcloud_theme
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --log-bin=binlog --binlog-format=ROW
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+      - MYSQL_PASSWORD=mysqlpassword
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MYSQL_LOG_BIN_EXPIRE_LOGS_DAYS=3
+
+  app:
+    image: nextcloud
+    restart: unless-stopped
+    ports:
+      - 18080:80
+    depends_on:
+      - db
+    volumes:
+      - nextcloud:/var/www/html
+      - apps:/var/www/html/custom_apps
+      - config:/var/www/html/config
+      - data:/var/www/html/data
+      - theme:/var/www/html/themes/my_themes
+    environment:
+      MYSQL_PASSWORD: mysqlpassword
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_HOST: db
+      NEXTCLOUD_ADMIN_USER: root
+      NEXTCLOUD_ADMIN_PASSWORD: rootpassword
+      NEXTCLOUD_TRUSTED_DOMAINS: "local.wolindata.com 192.168.110.160 pan.wolindata.com"
+

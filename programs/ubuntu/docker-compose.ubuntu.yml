@@ -1,0 +1,6 @@
+services:
+  ubuntu:
+    image: ubuntu
+    restart: unless-stopped
+    env_file: .env
+    command: bash
